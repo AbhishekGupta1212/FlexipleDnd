@@ -6,6 +6,7 @@ const Note = ({ id, text, onDelete, onEdit, onPin, isPinned }) => {
   const [noteText, setNoteText] = useState(text);
   const [isMoving, setIsMoving] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   const stickyNoteRef = useRef();
 
@@ -29,7 +30,7 @@ const Note = ({ id, text, onDelete, onEdit, onPin, isPinned }) => {
   const handleMouseDown = (e) => {
     setIsMoving(true);
     const dimensions = stickyNoteRef.current.getBoundingClientRect();
-    setPosition({
+    setOffset({
       x: e.clientX - dimensions.left,
       y: e.clientY - dimensions.top,
     });
@@ -37,8 +38,8 @@ const Note = ({ id, text, onDelete, onEdit, onPin, isPinned }) => {
 
   const handleMouseMove = (e) => {
     if (isMoving) {
-      const x_axis = e.clientX - position.x;
-      const y_axis = e.clientY - position.y;
+      const x_axis = e.clientX - offset.x;
+      const y_axis = e.clientY - offset.y;
 
       stickyNoteRef.current.style.left = x_axis + 'px';
       stickyNoteRef.current.style.top = y_axis + 'px';
@@ -66,7 +67,7 @@ const Note = ({ id, text, onDelete, onEdit, onPin, isPinned }) => {
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
-      style={{ position: 'absolute' }}
+      style={{ position: 'absolute', top: position?.y || 0, left: position?.x || 0 }}
     >
       {isEditing ? (
         <textarea
