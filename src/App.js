@@ -1,11 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
-import { Board } from './Components/Homepage';
+import Board from './Components/Homepage';
+
 
 function App() {
   return (
     <div className="App">
-      <Board/>
+  <Board/>
     </div>
   );
 }

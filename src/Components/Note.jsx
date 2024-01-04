@@ -6,6 +6,7 @@ const Note = ({ id, text, onDelete, onEdit, onPin, isPinned }) => {
   const [noteText, setNoteText] = useState(text);
   const [isMoving, setIsMoving] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+
   const stickyNoteRef = useRef();
 
   const handleDelete = () => {
@@ -65,6 +66,7 @@ const Note = ({ id, text, onDelete, onEdit, onPin, isPinned }) => {
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      style={{ position: 'absolute' }}
     >
       {isEditing ? (
         <textarea
