@@ -1,41 +1,143 @@
 .note {
+  height:200px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  padding: 10px;
+  min-width: 150px;
+  min-height: 200px;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.0s ease;
+  width:200px;
+  color:black;
+  position: absolute;
+  top: 130px;
+  left:50px;
+  cursor: grab;
+  display: flex; 
+  flex-direction: column;   
+    
+}
+
+.note:hover {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.note p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note textarea {
+  width: 100%;
+  outline: none;
+  padding: 10px;
+  background-color:#f3e308;
+  color: black;
+  font-weight: 600;
+  resize: none;
+  line-height: 20px;
+  font-size: 20px;
+}
+.text-wrapper {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  width: 100%;
+}
+.text{
+  width:100%;
+  height:200px;
+  outline: none;
+  padding: 10px;
+  color: black;
+  font-weight: 400;
+  line-height: 20px;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+  background-color: rgb(182, 255, 255);
+}
+
+.button-container button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+  background-color: #f0f0f0;
+}
+
+.pinned {
+  border-color: 1px solid #555;
+  background-color: #eeeeee;
+}
+.clear{
+  color:rgba(255, 0, 0, 0);
+ 
+}
+
+
+
+
+  /* .noteContainer {
     position: absolute;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: grab;
-    transition: all 0.3s ease;
+    width: 200px;
+    height: 250px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f2e96b;
+    border: 1px solid #bfa004;
   }
   
-  .note.pinned {
-    border-color: #4caf50;
+  .noteContainer div:first-child {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #d9cb04;
   }
   
-  .note-textarea {
+  .noteContainer :first-child > div {
+    width: 10px;
+    height: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    margin: 0px 10px 0px 10px;
+  }
+  
+  .noteContainer :nth-child(2) {
+    width: 100%;
+    height: calc(100% - 30px);
+    overflow: hidden;
+  }
+  
+  .textArea {
     width: 100%;
     height: 100%;
-    box-sizing: border-box;
-  }
-  
-  .note-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .button-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .clear {
-    background: none;
+    background-color: transparent;
+    resize: none;
+    outline: none;
     border: none;
-    cursor: pointer;
+    font-family: stylish;
+    font-size: 30px;
   }
   
-  .text {
-    margin-top: 10px;
+  ::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
   }
+  ::-webkit-scrollbar-thumb {
+    background: transparent;
+  } */
