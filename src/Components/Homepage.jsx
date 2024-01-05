@@ -105,7 +105,7 @@ const updateNotes = (ind, newText) => {
   return (
     <>
    
-      <Box w="100%" h="100vh" position="relative" bg="#ffffff" overflow="auto">
+      <Box w="100%" h="100vh" position="relative" bg="#97e5e7" overflow="auto">
          <h2>Bulletin Board</h2>
         <button className="addButton" onClick={addNotes}>
           Add Note

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, {useState} from 'react';
 import '../Styles/note.css';
 
 const Note = ({
@@ -36,7 +36,7 @@ const Note = ({
           x
         </button>
         <button className="rainbow1 rainbow-1" onClick={() => pinNote(note.id)}>
-          {note.pinned ? (
+          {note.pinned ? ( 
            "Unpin note"
           ) : (
            "Pin note"
