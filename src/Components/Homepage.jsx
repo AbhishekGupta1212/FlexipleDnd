@@ -1,74 +1,145 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import Note from './Note';
-import '../Styles/board.css'; // Import your board styles
+import {
+  Box,
+
+} from "@chakra-ui/react";
+import '../Styles/board.css'; 
 
 const Board = () => {
-  const [allNotes, setAllNotes] = useState([]);
-  const [pinnedNotes, setPinnedNotes] = useState([]);
-  const [idCounter, setIdCounter] = useState(1);
+  const [notes, setNotes] = useState([]);
+  
+  const [draggedNote, setDraggedNote] = useState(null);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const handleAddNote = () => {
-    const newNote = {
-      id: idCounter,
-      text: 'New Note',
-    };
-    setIdCounter(idCounter + 1);
-    setAllNotes((prevNotes) => [...prevNotes, newNote]);
+ 
+
+  useEffect(() => {
+    const availableNotes = localStorage.getItem("notes");
+    availableNotes ? setNotes(JSON.parse(availableNotes)) : setNotes([]);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
+
+  const addNotes = () => {
+    let x = Math.floor(Math.random() * 50) + 1;
+    let y = Math.floor(Math.random() * 50) + 1;
+    const newNotes = [
+      ...notes,
+      {
+        text: "New Note",
+        x: x * 10,
+        y: y * 10,
+        pinned: false,
+        id: Math.floor(Math.random() * 500) + 1
+      },
+    ];
+    localStorage.setItem("notes", JSON.stringify(newNotes));
+    setNotes(newNotes);
   };
 
-  const handleDelete = (noteId) => {
-    setAllNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
-    setPinnedNotes((prevPinnedNotes) =>
-      prevPinnedNotes.filter((pinnedNote) => pinnedNote.id !== noteId)
-    );
-  };
-
-  const handleEdit = (noteId, newText) => {
-    setAllNotes((prevNotes) =>
-      prevNotes.map((note) => (note.id === noteId ? { ...note, text: newText } : note))
-    );
-  };
-
-  const handlePin = (noteId) => {
-    const noteToPin = allNotes.find((note) => note.id === noteId);
-
-    if (noteToPin) {
-      const isPinned = pinnedNotes.some((pinnedNote) => pinnedNote.id === noteId);
-
-      if (isPinned) {
-        setPinnedNotes((prevPinnedNotes) =>
-          prevPinnedNotes.filter((pinnedNote) => pinnedNote.id !== noteId)
-        );
-      } else {
-        setPinnedNotes((prevPinnedNotes) => [...prevPinnedNotes, noteToPin]);
-      }
+  const handleMouseDown = (e, id, pinned) => {
+    if (pinned) {
+      return;
+    } else {
+      setDraggedNote(id);
+      setDragStart({
+        x: e.clientX,
+        y: e.clientY,
+      });
     }
   };
 
+  const handleMouseMove = (e) => {
+   
+    if (draggedNote !== null) {
+      const x = e.clientX - dragStart.x;
+      const y = e.clientY - dragStart.y;
+
+      setNotes((prevNotes) =>
+        prevNotes.map((note) =>
+          note.id === draggedNote
+            ? { ...note, x: note.x + x, y: note.y + y }
+            : note
+        )
+      );
+
+      setDragStart({
+        x: e.clientX,
+        y: e.clientY,
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    
+    setDraggedNote(null);
+    setDragStart({ x: 0, y: 0 });
+  };
+
+
+ 
+
+  const handlePin = (id) => {
+    let pinNote = notes.map((ele) =>
+      ele.id === id ? { ...ele, pinned: !ele.pinned } : ele
+    );
+    setNotes(pinNote);
+  };
+const removeNotes = (ind) => {
+  const updatedNotes = [...notes];
+  updatedNotes.splice(ind, 1);
+  localStorage.setItem("notes", JSON.stringify(updatedNotes));
+  setNotes(updatedNotes);
+};
+const updateNotes = (ind, newText) => {
+  console.log(ind, newText);
+  const updatedNotes = [...notes];
+  updatedNotes[ind].text = newText;
+  localStorage.setItem("notes", JSON.stringify(updatedNotes));
+  setNotes(updatedNotes);
+};
+
   return (
     <>
-      <div className="board-title">
-        <strong>
-          <i>Bulletin Board</i>
-        </strong>
-      </div>
-      <div className="container">
-        <button onClick={handleAddNote} className="add-btn">
+   
+      <Box w="100%" h="100vh" position="relative" bg="#ffffff" overflow="auto">
+         <h2>Bulletin Board</h2>
+        <button className="addButton" onClick={addNotes}>
           Add Note
         </button>
-        {allNotes.map((note) => (
-          <Note
-            key={note.id}
-            id={note.id}
-            text={note.text}
-            onDelete={() => handleDelete(note.id)}
-            onEdit={(newText) => handleEdit(note.id, newText)}
-            onPin={() => handlePin(note.id)}
-            isPinned={pinnedNotes.some((pinnedNote) => pinnedNote.id === note.id)}
-            pinnedNotes={pinnedNotes}
-          />
+
+        {notes?.map((ele, ind) => (
+          <Box
+            key={ind}
+            onMouseDown={(e) => handleMouseDown(e, ele.id, ele.pinned)}
+            onMouseMove={(e) => handleMouseMove(e)}
+            onMouseUp={handleMouseUp}
+            position="absolute"
+            zIndex={ele.pinned ? 1000 + ind : ind}
+            left={ele.x + "px"}
+            top={ele.y + "px"}
+            cursor="move"
+            w="230px"
+            p="15px 8px 7px 15px"
+            height="auto"
+            bg="#e4e24a"
+           boxShadow={" rgba(0, 0, 0, 0.35) 0px 5px 15px"}
+            draggable={ele.pinned}
+          >
+            
+            <Note
+              note={ele}
+              removeNotes={removeNotes}
+              pinNote={handlePin}
+              ind={ind}
+              updateNotes={updateNotes}
+            />
+          </Box>
         ))}
-      </div>
+      </Box>
     </>
   );
 };
